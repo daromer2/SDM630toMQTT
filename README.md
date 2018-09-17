@@ -1,6 +1,12 @@
 
+
+
 # Projects for smart home. ESP8266 + NanoPi NEO Air
 [![Build Status](https://travis-ci.org/merlokk/SmartHome.svg?branch=master)](https://travis-ci.org/merlokk/SmartHome)
+
+
+## Why forked?
+Its forked because Merloks version does not work with updated libraries. Expect this to be updated in short to work. 
 
 ### ESP8266AZ7788
 Connect Datalogger AZ-7788 to MQTT
