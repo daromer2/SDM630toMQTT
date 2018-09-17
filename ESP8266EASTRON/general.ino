@@ -99,26 +99,26 @@ void wifiSetup(bool withAutoConnect) {
   // load custom params
   params.LoadFromEEPROM();
 
-  WiFiManager wifiManager(DEBUG_SERIAL);
-  wifiManager.mainProgramVersion = PROGRAM_VERSION;
+  WiFiManager wifiManager;
+  //wifiManager.mainProgramVersion = PROGRAM_VERSION;
 
   WiFiManagerParameter custom_mqtt_text("<br/>MQTT config: <br/>");
   wifiManager.addParameter(&custom_mqtt_text);
-  WiFiManagerParameter custom_mqtt_user("mqtt-user", "MQTT User", params[F("mqtt_user")], 20);
+  WiFiManagerParameter custom_mqtt_user("mqtt-user", "MQTT User", params[F("mqtt_user")].c_str(), 20);
   wifiManager.addParameter(&custom_mqtt_user);
-  WiFiManagerParameter custom_mqtt_password("mqtt-password", "MQTT Password", params[F("mqtt_passwd")], 20, "type = \"password\"");
+  WiFiManagerParameter custom_mqtt_password("mqtt-password", "MQTT Password", params[F("mqtt_passwd")].c_str(), 20, "type = \"password\"");
   wifiManager.addParameter(&custom_mqtt_password);
-  WiFiManagerParameter custom_mqtt_server("mqtt-server", "MQTT Broker Address", params[F("mqtt_server")], 20);
+  WiFiManagerParameter custom_mqtt_server("mqtt-server", "MQTT Broker Address", params[F("mqtt_server")].c_str(), 20);
   wifiManager.addParameter(&custom_mqtt_server);
-  WiFiManagerParameter custom_mqtt_port("mqtt-port", "MQTT Broker Port", params[F("mqtt_port")], 20);
+  WiFiManagerParameter custom_mqtt_port("mqtt-port", "MQTT Broker Port", params[F("mqtt_port")].c_str(), 20);
   wifiManager.addParameter(&custom_mqtt_port);
-  WiFiManagerParameter custom_mqtt_path("mqtt-path", "MQTT Path", params[F("mqtt_path")], 20);
+  WiFiManagerParameter custom_mqtt_path("mqtt-path", "MQTT Path", params[F("mqtt_path")].c_str(), 20);
   wifiManager.addParameter(&custom_mqtt_path);
-  WiFiManagerParameter custom_device_type("device-type", "Device type", params[F("device_type")], 20);
+  WiFiManagerParameter custom_device_type("device-type", "Device type", params[F("device_type")].c_str(), 20);
   wifiManager.addParameter(&custom_device_type);
   WiFiManagerParameter custom_mqtt_text1("<br/>Development config: <br/>");
   wifiManager.addParameter(&custom_mqtt_text1);
-  WiFiManagerParameter custom_passwd("device-paswd", "Device dev password", params[F("device_passwd")], 20);
+  WiFiManagerParameter custom_passwd("device-paswd", "Device dev password", params[F("device_passwd")].c_str(), 20);
   wifiManager.addParameter(&custom_passwd);
 
   wifiManager.setAPCallback(configModeCallback);
@@ -443,5 +443,4 @@ bool generalLoop() {
 
   return true;
 }
-
 
