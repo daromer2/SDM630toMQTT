@@ -23,7 +23,7 @@
 
 // device modbus address
 #define               MODBUS_ADDRESS    1
-#define               CONNECTED_OBJ     eastron.Connected
+#define               CONNECTED_OBJ     eas.Connected
 
 #define               MQTT_DEFAULT_TOPIC "PowerMeter"
 
@@ -42,7 +42,9 @@
 #define LEDOFF   HIGH
 
 // objects
-ModbusPoll       eastron;
+const int        units = 4;
+ModbusPoll      eas;
+ModbusPoll       eastron[units];
 piTimer          ptimer;
 
 ///////////////////////////////////////////////////////////////////////////
@@ -51,12 +53,12 @@ piTimer          ptimer;
 void setup() {
   Serial.setDebugOutput(false);
   Serial1.setDebugOutput(true);
-  Serial.begin(115200); //74880
+  Serial.begin(9600); //74880
   Serial1.begin(230400); // high speed logging port
 
   generalSetup();
 
-  //timer
+  //Timers
   ptimer.Add(TID_POLL, MILLIS_TO_POLL);
   ptimer.Add(TID_HOLD_REG, MILLIS_TO_POLL_HOLD_REG);
 
@@ -67,16 +69,21 @@ void setup() {
   digitalWrite(LED2, LEDOFF);
 
   // eastron setup
-  eastron.SetDeviceAddress(MODBUS_ADDRESS);
-  eastron.SetLogger(&logger);
-  DEBUG_PRINT(F("DeviceType: "));
-  DEBUG_PRINTLN(params[F("device_type")]);
-  eastron.ModbusSetup(params[F("device_type")].c_str());
+  for (int i = 1; i < units; i++) {
+    eastron[i].SetDeviceAddress(MODBUS_ADDRESS);
+    eastron[i].SetLogger(&logger);
+    DEBUG_PRINT(F("DeviceType: "));
+    DEBUG_PRINTLN(params[F("device_type")]);
+    eastron[i].ModbusSetup(params[F("device_type")].c_str());
 
-  String str;
-  eastron.getStrModbusConfig(str);
-  DEBUG_PRINTLN(F("Modbus config:"));
-  DEBUG_PRINTLN(str);
+
+  }
+
+
+ // String str;
+ // eastron[.getStrModbusConfig(str);
+ // DEBUG_PRINTLN(F("Modbus config:"));
+ // DEBUG_PRINTLN(str);
 
   // set password in work mode
   if (params[F("device_passwd")].length() > 0)
@@ -94,38 +101,55 @@ void loop() {
     return;
   }
 
-  if (ptimer.isArmed(TID_POLL)) {
+
+
+  if (ptimer.isArmed(TID_POLL)) { //Lets poll the meters now
     // modbus poll function
-    if (ptimer.isArmed(TID_HOLD_REG)) {
-      eastron.Poll(POLL_ALL);
+    bool pol = false;
+    if (ptimer.isArmed(TID_HOLD_REG)) { //Lets ooll all registers instead
+      pol = true;
       ptimer.Reset(TID_HOLD_REG);
-    } else {
-      eastron.Poll(POLL_INPUT_REGISTERS);
-    };
-
-    yield();
-
+    } 
+      
     // publish some system vars
     mqtt.BeginPublish();
     mqttPublishRegularState();
 
-    // publish vars from configuration
-    if (eastron.mapConfigLen && eastron.mapConfig && eastron.Connected) {
-      String str;
-      for(int i = 0; i < eastron.mapConfigLen; i++) {
-        eastron.getValue(
-          str,
-          eastron.mapConfig[i].command,
-          eastron.mapConfig[i].modbusAddress,
-          eastron.mapConfig[i].valueType);
-        mqtt.PublishState(eastron.mapConfig[i].mqttTopicName, str);        
-      }    
-    };
-    mqtt.Commit();
   
+    for (int i = 1; i <units + 1; i++) {  
+    
+      if (pol) { 
+        eastron[i].Poll(POLL_ALL);
+      } else {
+        eastron[i].Poll(POLL_INPUT_REGISTERS);
+      }
+    
+      yield();
+  
+      // publish vars from configuration
+      if (eastron[i].mapConfigLen && eastron[i].mapConfig && eastron[i].Connected) {
+        String str;
+        for(int j = 0; j < eastron[i].mapConfigLen; j++) {
+          eastron[i].getValue(
+            str,
+            eastron[i].mapConfig[j].command,
+            eastron[i].mapConfig[j].modbusAddress,
+            eastron[i].mapConfig[j].valueType);
+            String topic = eastron[i].mapConfig[j].mqttTopicName;
+            topic = String(i) + "/" + topic;
+            mqtt.PublishState(topic, str);  
+            DEBUG_PRINTLN(topic);      
+        }    
+      };
+      
+    }
+    
     ptimer.Reset(TID_POLL);
+    mqtt.Commit();
   }
   
+    
+
   digitalWrite(LED2, LEDOFF);
   delay(100);
 }

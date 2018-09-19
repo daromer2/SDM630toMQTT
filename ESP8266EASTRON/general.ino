@@ -45,9 +45,9 @@ void mqttPublishRegularState() {
 #endif
   }
 
-#ifdef CONNECTED_OBJ
-  mqtt.PublishState(SF("Connected"), CONNECTED_OBJ ? MQTT_ON_PAYLOAD:MQTT_OFF_PAYLOAD);
-#endif
+//#ifdef CONNECTED_OBJ
+//  mqtt.PublishState(SF("Connected"), CONNECTED_OBJ ? MQTT_ON_PAYLOAD:MQTT_OFF_PAYLOAD);
+//#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////
