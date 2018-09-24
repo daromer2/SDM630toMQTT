@@ -69,8 +69,8 @@ void setup() {
   digitalWrite(LED2, LEDOFF);
 
   // eastron setup
-  for (int i = 1; i < units; i++) {
-    eastron[i].SetDeviceAddress(MODBUS_ADDRESS);
+  for (int i = 1; i < units+1; i++) {
+    eastron[i].SetDeviceAddress(i);
     eastron[i].SetLogger(&logger);
     DEBUG_PRINT(F("DeviceType: "));
     DEBUG_PRINTLN(params[F("device_type")]);
@@ -116,7 +116,7 @@ void loop() {
     mqttPublishRegularState();
 
   
-    for (int i = 1; i <units + 1; i++) {  
+    for (int i = 1; i <units+1; i++) {  
     
       if (pol) { 
         eastron[i].Poll(POLL_ALL);
