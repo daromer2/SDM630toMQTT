@@ -1,3 +1,13 @@
+#include <autotimezone.h>
+#include <az7798.h>
+#include <eastron.h>
+#include <emodbus.h>
+#include <etools.h>
+#include <modbuspoll.h>
+#include <pitimer.h>
+#include <xmqtt.h>
+#include <xparam.h>
+
 /*
  * Eastron energy counter bridge. 
  * SDM 230, SDM 630
@@ -28,7 +38,7 @@
 #define               MQTT_DEFAULT_TOPIC "PowerMeter"
 
 // poll
-#define MILLIS_TO_POLL          15*1000       //max time to wait for poll input registers (regular poll)
+#define MILLIS_TO_POLL          1500       //max time to wait for poll input registers (regular poll)
 #define MILLIS_TO_POLL_HOLD_REG 15*60*1000    //max time to wait for poll all
 // timers
 #define TID_POLL                0x0001        // timer UID for regular poll 
@@ -54,6 +64,7 @@ void setup() {
   Serial.setDebugOutput(false);
   Serial1.setDebugOutput(true);
   Serial.begin(9600); //74880
+  //Serial.swap(); // Move it to D7 and D8 instead
   Serial1.begin(230400); // high speed logging port
 
   generalSetup();
@@ -93,6 +104,15 @@ void setup() {
   digitalWrite(LED1, LEDOFF);
 }
 
+void checkWifi() {
+ if (WiFi.status() != WL_CONNECTED) {
+  Serial.println("Wifi was disconnected, reconnecting");
+
+  WiFi.begin();
+  delay(500);
+ }   
+}
+
 // the loop function runs over and over again forever
 void loop() {
   digitalWrite(LED2, LEDON);
@@ -104,6 +124,7 @@ void loop() {
 
 
   if (ptimer.isArmed(TID_POLL)) { //Lets poll the meters now
+    checkWifi();
     // modbus poll function
     bool pol = false;
     if (ptimer.isArmed(TID_HOLD_REG)) { //Lets ooll all registers instead

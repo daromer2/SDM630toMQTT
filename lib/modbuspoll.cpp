@@ -59,6 +59,7 @@ const mqttMapConfigS eastron230Small[] = {
   {"PowerFactor",     POLL_INPUT_REGISTERS, 0x1E, MDB_FLOAT},
   {"PhaseAngle",      POLL_INPUT_REGISTERS, 0x24, MDB_FLOAT},
   
+  
   {"Frequency",              POLL_INPUT_REGISTERS, 0x46, MDB_FLOAT},
   {"ImportActive",           POLL_INPUT_REGISTERS, 0x48, MDB_FLOAT},
   {"ExportActive",           POLL_INPUT_REGISTERS, 0x4A, MDB_FLOAT},
@@ -76,6 +77,7 @@ const mqttMapConfigS eastron630small[] = {
   {"PowerActive1",    POLL_INPUT_REGISTERS, 0x0C, MDB_FLOAT},
   {"PowerActive2",    POLL_INPUT_REGISTERS, 0x0E, MDB_FLOAT},
   {"PowerActive3",    POLL_INPUT_REGISTERS, 0x10, MDB_FLOAT},
+  
   {"PowerVA1",        POLL_INPUT_REGISTERS, 0x12, MDB_FLOAT},
   {"PowerVA2",        POLL_INPUT_REGISTERS, 0x14, MDB_FLOAT},
   {"PowerVA3",        POLL_INPUT_REGISTERS, 0x16, MDB_FLOAT},
@@ -84,10 +86,10 @@ const mqttMapConfigS eastron630small[] = {
   {"PowerVAR3",       POLL_INPUT_REGISTERS, 0x1C, MDB_FLOAT},
   {"NeutralCurrent",  POLL_INPUT_REGISTERS, 0xE0, MDB_FLOAT},
 //  {"Data",       POLL_INPUT_REGISTERS, 0x00, MDB_16BYTE_HEX}, // debug only
-
+{"PowerActiveSum",    POLL_INPUT_REGISTERS, 0x34, MDB_FLOAT},
   {"Frequency",       POLL_INPUT_REGISTERS, 0x46, MDB_FLOAT},
 
-  {"SerialNumber",    POLL_HOLDING_REGISTERS, 0x2A, MDB_8BYTE_HEX},
+//  {"SerialNumber",    POLL_HOLDING_REGISTERS, 0x2A, MDB_8BYTE_HEX},
 };
 
 const mqttMapConfigS eastron630[] = {

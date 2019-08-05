@@ -365,7 +365,7 @@ void generalSetup() {
   delay(200);
   initPrintStartDebugInfo();
 
-  WiFi.hostname(HARDWARE_ID);
+  WiFi.hostname("ESP_SDM630");
 
   // 0 = programming mode
   pinMode(PIN_PGM, INPUT);   
