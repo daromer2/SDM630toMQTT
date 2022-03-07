@@ -5,6 +5,8 @@
 [![Build Status](https://travis-ci.org/merlokk/SmartHome.svg?branch=master)](https://travis-ci.org/merlokk/SmartHome)
 
 
+## DEPRECATED. Tried to get it to compile but its just a pain. It need to be updated and rebuilt from scratch. Feel free to do that :)
+
 ## Why forked?
 Its forked because Merloks version does not work with updated libraries. Expect this to be updated in short to work. 
 
