@@ -9,7 +9,7 @@ Runs on:
 | ESP8266, e.g. Wemos D1 mini and clones | `d1_mini` |
 | ESP32-S3, e.g. DevKitC-1 or SuperMini | `esp32s3` |
 
-> Version 2 is a full rewrite. The old firmware (and the other old projects in this repository) are in [deprecated/](deprecated/) and are no longer maintained.
+> Version 2 is a full rewrite. The old v1 firmware and the other old projects that used to live in this repository are no longer maintained; they are still available in the git history (before the v2 rewrite).
 
 ## Features
 
